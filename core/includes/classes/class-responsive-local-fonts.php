@@ -120,16 +120,33 @@ if ( ! class_exists( 'Responsive_Local_Fonts' ) ) :
 		}
 
 		protected static function rrmdir( $dir ) {
-			$items = glob( trailingslashit( $dir ) . '*', GLOB_NOSORT );
-			if ( is_array( $items ) ) {
-				foreach ( $items as $item ) {
-					if ( is_dir( $item ) ) {
-						self::rrmdir( $item );
-					} else {
-						@unlink( $item );
-					}
+			$dir = untrailingslashit( $dir );
+
+			if ( ! is_dir( $dir ) ) {
+				return;
+			}
+
+			$items = array_merge(
+				glob( $dir . '/*', GLOB_NOSORT ) ?: array(),
+				glob( $dir . '/.*', GLOB_NOSORT ) ?: array()
+			);
+
+			foreach ( $items as $item ) {
+				$basename = wp_basename( $item );
+
+				// Skip current and parent directory entries.
+				if ( '.' === $basename || '..' === $basename ) {
+					continue;
+				}
+
+				if ( is_dir( $item ) && ! is_link( $item ) ) {
+					self::rrmdir( $item );
+				} else {
+					@chmod( $item, 0644 );
+					@unlink( $item );
 				}
 			}
+
 			@rmdir( $dir );
 		}
 	}
