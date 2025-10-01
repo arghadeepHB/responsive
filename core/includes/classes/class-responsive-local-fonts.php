@@ -116,28 +116,77 @@ if ( ! class_exists( 'Responsive_Local_Fonts' ) ) :
 		}
 
 		/**
-		 * Flush all cached local fonts
+		 * Flush all cached local fonts.
+		 *
+		 * @return bool True on success, false otherwise.
 		 */
 		public static function flush_cache() {
 			list( $base_dir ) = self::get_uploads();
+			$success = true;
 			if ( is_dir( $base_dir ) ) {
-				self::rrmdir( $base_dir );
-				wp_mkdir_p( $base_dir );
+				$success = self::rrmdir( $base_dir ) && $success;
 			}
+			// Recreate the base cache directory
+			if ( ! wp_mkdir_p( $base_dir ) ) {
+				$success = false;
+			}
+			// Verify the directory is empty after recreation
+			if ( ! self::is_dir_empty( $base_dir ) ) {
+				$success = false;
+			}
+			/**
+			 * Fires after the local fonts cache has been flushed.
+			 *
+			 * @param bool   $success  Whether the flush operation succeeded fully.
+			 * @param string $base_dir Base cache directory path.
+			 */
+			do_action( 'responsive_local_fonts_cache_flushed', $success, $base_dir );
+			return $success;
 		}
 
 		protected static function rrmdir( $dir ) {
-			$items = glob( trailingslashit( $dir ) . '*', GLOB_NOSORT );
-			if ( is_array( $items ) ) {
-				foreach ( $items as $item ) {
-					if ( is_dir( $item ) ) {
-						self::rrmdir( $item );
+			$ok = true;
+			$entries = @scandir( $dir );
+			if ( is_array( $entries ) ) {
+				foreach ( $entries as $entry ) {
+					if ( $entry === '.' || $entry === '..' ) {
+						continue;
+					}
+					$path = trailingslashit( $dir ) . $entry;
+					if ( is_dir( $path ) ) {
+						if ( ! self::rrmdir( $path ) ) {
+							$ok = false;
+						}
 					} else {
-						@unlink( $item );
+						if ( ! @unlink( $path ) ) {
+							$ok = false;
+						}
 					}
 				}
 			}
-			@rmdir( $dir );
+			if ( ! @rmdir( $dir ) ) {
+				$ok = false;
+			}
+			return $ok;
+		}
+
+		/**
+		 * Check if a directory is empty (ignoring dot entries).
+		 *
+		 * @param string $dir Directory path.
+		 * @return bool
+		 */
+		protected static function is_dir_empty( $dir ) {
+			$entries = @scandir( $dir );
+			if ( ! is_array( $entries ) ) {
+				return false;
+			}
+			foreach ( $entries as $entry ) {
+				if ( $entry !== '.' && $entry !== '..' ) {
+					return false;
+				}
+			}
+			return true;
 		}
 	}
 
