@@ -36,6 +36,8 @@ if ( ! class_exists( 'Responsive_Local_Fonts' ) ) :
 			if ( empty( $google_css_url ) ) {
 				return false;
 			}
+			// Ensure the URL is in a request-safe format (avoid HTML entities like &amp;)
+			$google_css_url = html_entity_decode( $google_css_url, ENT_QUOTES );
 			list( $base_dir, $base_url ) = self::get_uploads();
 			$hash      = md5( $google_css_url );
 			$targetDir = trailingslashit( $base_dir . $hash );
@@ -51,6 +53,11 @@ if ( ! class_exists( 'Responsive_Local_Fonts' ) ) :
 
 			$response = wp_remote_get( $google_css_url, array( 'timeout' => 15 ) );
 			if ( is_wp_error( $response ) ) {
+				return false;
+			}
+			// If Google returns a 400, skip caching and bail out.
+			$status_code = (int) wp_remote_retrieve_response_code( $response );
+			if ( 400 === $status_code ) {
 				return false;
 			}
 			$css = wp_remote_retrieve_body( $response );
