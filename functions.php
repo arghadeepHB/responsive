@@ -513,6 +513,20 @@ function responsive_edit_customize_register( $wp_customize ) {
 		)
 	);
 	$wp_customize->selective_refresh->add_partial(
+		'responsive_mobile_header_above_row_tabs',
+		array(
+			'selector' => '.responsive-site-above-mobile-header-wrap',
+			'settings' => array( 'responsive_header_above_row_tabs' ),
+		)
+	);
+	$wp_customize->selective_refresh->add_partial(
+		'responsive_mobile_header_primary_row_tabs',
+		array(
+			'selector' => '.responsive-site-primary-mobile-header-wrap',
+			'settings' => array( 'responsive_header_primary_row_tabs' ),
+		)
+	);
+	$wp_customize->selective_refresh->add_partial(
 		'responsive_header_primary_row_tabs',
 		array(
 			'selector' => '.responsive-site-primary-header-wrap',

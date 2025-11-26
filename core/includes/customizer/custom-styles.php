@@ -6867,8 +6867,9 @@ function responsive_customizer_styles() {
 	}
 
 	// Header visibility based on device type
-	// Show desktop header on screens wider than 992px, hide on mobile/tablet
-	// Show mobile/tablet header on screens 992px and below, hide on desktop
+	// Show desktop header on screens wider than mobile menu breakpoint, hide on mobile/tablet
+	// Show mobile/tablet header on screens at or below mobile menu breakpoint, hide on desktop
+	$mobile_menu_breakpoint = esc_html( get_theme_mod( 'responsive_mobile_menu_breakpoint', 767 ) );
 	$custom_css .= "
 	.responsive-desktop-header-wrapper {
 		display: block;
@@ -6876,7 +6877,7 @@ function responsive_customizer_styles() {
 	.responsive-mobile-header-wrapper {
 		display: none;
 	}
-	@media screen and ( max-width: 992px ) {
+	@media screen and ( max-width: {$mobile_menu_breakpoint}px ) {
 		.responsive-desktop-header-wrapper {
 			display: none;
 		}

@@ -155,6 +155,62 @@
 	// Initialize on page load
 	updateDisableStickyHeaderMobileMenu();
 
+	// Function to update header visibility based on mobile menu breakpoint
+	function updateHeaderVisibility() {
+		var mobile_menu_breakpoint = api( 'responsive_mobile_menu_breakpoint' ).get();
+		var disable_mobile_menu = api( 'responsive_disable_mobile_menu' ).get();
+		
+		if ( 0 === disable_mobile_menu ) {
+			mobile_menu_breakpoint = 0;
+		}
+
+		jQuery( 'style#responsive-header-visibility' ).remove();
+		
+		// Inject CSS with media queries to control header visibility based on breakpoint
+		// This overrides the server-generated CSS with the current breakpoint value
+		var css = '.responsive-desktop-header-wrapper { display: block; }';
+		css += '.responsive-mobile-header-wrapper { display: none; }';
+		css += '@media screen and ( max-width: ' + mobile_menu_breakpoint + 'px ) {';
+		css += '.responsive-desktop-header-wrapper { display: none !important; }';
+		css += '.responsive-mobile-header-wrapper { display: block !important; }';
+		css += '}';
+		css += '@media screen and ( min-width: ' + ( mobile_menu_breakpoint + 1 ) + 'px ) {';
+		css += '.responsive-desktop-header-wrapper { display: block !important; }';
+		css += '.responsive-mobile-header-wrapper { display: none !important; }';
+		css += '}';
+		
+		jQuery( 'head' ).append( '<style id="responsive-header-visibility">' + css + '</style>' );
+	}
+	
+	// Update header visibility when preview device changes
+	if ( api.previewedDevice ) {
+		api.previewedDevice.bind( function() {
+			updateHeaderVisibility();
+		});
+	}
+	
+	// Update header visibility on window resize (for customizer preview)
+	jQuery( window ).on( 'resize', function() {
+		updateHeaderVisibility();
+	});
+
+	// Update when mobile menu breakpoint changes
+	api( 'responsive_mobile_menu_breakpoint', function( value ) {
+		value.bind( function() {
+			updateHeaderVisibility();
+		});
+	});
+
+	// Update when disable mobile menu changes
+	api( 'responsive_disable_mobile_menu', function( value ) {
+		value.bind( function() {
+			updateHeaderVisibility();
+		});
+	});
+
+	// Initialize on page load
+	updateHeaderVisibility();
+
 	api(
 		"responsive_disable_author_meta",
 		function( $swipe ) {
