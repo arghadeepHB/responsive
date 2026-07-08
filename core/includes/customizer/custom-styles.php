@@ -1173,81 +1173,7 @@ error_log('responsive_product_catalog_container_style==='.$responsive_product_ca
 		}
 	}
 
-	// lifter settings
 
-	if ( class_exists( 'LifterLMS' ) ) {
-
-		// container width.
-
-		$lifter_container_max_width = esc_html( get_theme_mod( 'lifterlms_container_width', 1140 ) );
-
-		if ( $lifter_container_max_width >= 1500 ) {
-
-			$lifter_container_max_width = 1500;
-
-		}
-
-		$custom_css .= "
-		.responsive-site-llms-contained #content {
-			width: {$lifter_container_max_width}px;
-		}
-		";
-
-		// box radius.
-
-		$lifter_box_radius = esc_html( get_theme_mod( 'lifterlms_box_radius', 0 ) );
-
-		$custom_css .= "
-		.responsive-site-style-llms-content-boxed .site-content .hentry,
-		.responsive-site-style-llms-boxed aside#secondary .widget-wrapper,
-		.responsive-site-style-llms-boxed .site-content .hentry {
-			border-radius:{$lifter_box_radius}px;
-		}
-		";
-
-		// box padding
-
-		$lifter_box_padding_right  = esc_html( get_theme_mod( 'lifterlms_top_padding', Responsive\Core\get_responsive_customizer_defaults( 'box_padding' ) ) );
-		$lifter_box_padding_left   = esc_html( get_theme_mod( 'lifterlms_left_padding', Responsive\Core\get_responsive_customizer_defaults( 'box_padding' ) ) );
-		$lifter_box_padding_top    = esc_html( get_theme_mod( 'lifterlms_right_padding', Responsive\Core\get_responsive_customizer_defaults( 'box_padding' ) ) );
-		$lifter_box_padding_bottom = esc_html( get_theme_mod( 'lifterlms_bottom_padding', Responsive\Core\get_responsive_customizer_defaults( 'box_padding' ) ) );
-
-		$lifter_box_tablet_padding_right  = esc_html( get_theme_mod( 'lifterlms_tablet_right_padding', Responsive\Core\get_responsive_customizer_defaults( 'box_padding' ) ) );
-		$lifter_box_tablet_padding_left   = esc_html( get_theme_mod( 'lifterlms_tablet_left_padding', Responsive\Core\get_responsive_customizer_defaults( 'box_padding' ) ) );
-		$lifter_box_tablet_padding_top    = esc_html( get_theme_mod( 'lifterlms_tablet_top_padding', Responsive\Core\get_responsive_customizer_defaults( 'box_padding' ) ) );
-		$lifter_box_tablet_padding_bottom = esc_html( get_theme_mod( 'lifterlms_tablet_bottom_padding', Responsive\Core\get_responsive_customizer_defaults( 'box_padding' ) ) );
-
-		$lifter_box_mobile_padding_right  = esc_html( get_theme_mod( 'lifterlms_mobile_right_padding', Responsive\Core\get_responsive_customizer_defaults( 'box_padding' ) ) );
-		$lifter_box_mobile_padding_left   = esc_html( get_theme_mod( 'lifterlms_mobile_left_padding', Responsive\Core\get_responsive_customizer_defaults( 'box_padding' ) ) );
-		$lifter_box_mobile_padding_top    = esc_html( get_theme_mod( 'lifterlms_mobile_top_padding', Responsive\Core\get_responsive_customizer_defaults( 'box_padding' ) ) );
-		$lifter_box_mobile_padding_bottom = esc_html( get_theme_mod( 'lifterlms_mobile_bottom_padding', Responsive\Core\get_responsive_customizer_defaults( 'box_padding' ) ) );
-
-		$custom_css .= '.responsive-site-style-llms-content-boxed .hentry,
-		.responsive-site-style-llms-boxed .hentry,
-		.responsive-site-style-llms-boxed .widget-wrapper,
-		.responsive-site-style-llms-boxed .site-content article.product {
-			padding: ' . responsive_spacing_css( $lifter_box_padding_top, $lifter_box_padding_right, $lifter_box_padding_bottom, $lifter_box_padding_left ) . ';
-		}
-		@media screen and ( max-width: 992px ) {
-			.responsive-site-style-llms-content-boxed .hentry,
-			.responsive-site-style-llms-boxed .hentry,
-			.responsive-site-style-llms-boxed .widget-wrapper,
-			.responsive-site-style-llms-boxed .site-content article.product {
-				padding: ' . responsive_spacing_css( $lifter_box_tablet_padding_top, $lifter_box_tablet_padding_right, $lifter_box_tablet_padding_bottom, $lifter_box_tablet_padding_left ) . ';
-			}
-		}
-
-		@media screen and ( max-width: 576px ) {
-			.responsive-site-style-llms-content-boxed .hentry,
-			.responsive-site-style-llms-boxed .hentry,
-			.responsive-site-style-llms-boxed .widget-wrapper,
-			.responsive-site-style-llms-boxed .site-content article.product {
-				padding: ' . responsive_spacing_css( $lifter_box_mobile_padding_top, $lifter_box_mobile_padding_right, $lifter_box_mobile_padding_bottom, $lifter_box_mobile_padding_left ) . ';
-			}
-		}
-		';
-
-	}
 
 	$body_text_color      = esc_html( responsive_prepare_css_value( 'responsive_body_text_color' ) );
 	$meta_text_color      = esc_html( responsive_prepare_css_value( 'responsive_meta_text_color' ) );
@@ -2522,30 +2448,7 @@ error_log('responsive_product_catalog_container_style==='.$responsive_product_ca
 	.main-navigation .menu > li > a {
 		color: {$header_menu_link_color};
 	}
-	.responsive-llms-dash-wrap .llms-sd-item .llms-sd-link {
-		color: {$link_color};
-	}
-	.responsive-llms-dash-wrap .llms-sd-item .llms-sd-link:hover {
-		color: {$link_hover_color};
-	}
-	.llms-student-dashboard .responsive-llms-dash-nav-left .llms-sd-item.current a {
-	border-right: 5px solid {$button_border_color};
-	}
-	.llms-student-dashboard .responsive-llms-dash-nav-left .llms-sd-item a:hover {
-		border-right: 5px solid {$button_hover_border_color};
-		}
-	.llms-student-dashboard .responsive-llms-dash-nav-right .llms-sd-item.current a {
-		border-left: 5px solid {$button_border_color};
-		}
-		.llms-student-dashboard .responsive-llms-dash-nav-right .llms-sd-item a:hover {
-		border-left: 5px solid {$button_hover_border_color};
-		}	
-	.llms-student-dashboard .responsive-llms-dash-nav-right nav.llms-sd-nav	{
-	border-left:1px solid {$button_border_color};
-	}
-	.llms-student-dashboard .responsive-llms-dash-nav-left nav.llms-sd-nav{
-		border-right:1px solid {$button_border_color};
-	}
+
 	.main-navigation .res-iconify svg{
 		stroke: {$header_menu_link_color};
 	}

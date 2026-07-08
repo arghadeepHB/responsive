@@ -53,48 +53,7 @@ if ( class_exists( 'WooCommerce' ) && ( is_woocommerce() || is_cart() || is_chec
     <?php
 }
 
-elseif ( class_exists( 'LifterLMS' ) ) {
-
-
-	if ( in_array( 'post-type-archive-course', get_body_class() ) || in_array( 'post-type-archive-llms_membership', get_body_class() ) ) {
-
-		return;
-	} else {
-		
-        $get_sidebar_position = function( $context, $default = 'no' ) {
-            $global = get_theme_mod( 'responsive_default_sidebar_position', 'no' );
-            $value  = get_theme_mod( "responsive_{$context}_sidebar_position", $default );
-            return ( $value === 'global' || $value === 'default' ) ? $global : $value;
-        };
-
-        if ( is_page() ) {
-            $meta_value = get_post_meta( get_the_ID(), 'responsive_page_meta_sidebar_position', true );
-            $sidebar_position = $meta_value ? $meta_value : $get_sidebar_position( 'page', 'global' );
-        } elseif ( is_single() ) {
-            $sidebar_position = $get_sidebar_position( 'single_blog', 'global' );
-        } elseif ( is_home() || is_search() || is_archive() ) {
-            $sidebar_position = $get_sidebar_position( 'blog', 'global' );
-        } else {
-            $sidebar_position = $get_sidebar_position( 'blog', 'global' );
-        }
-
-		?>
-				<aside id="secondary" class="main-sidebar widget-area <?php echo esc_attr( implode( ' ', responsive_get_sidebar_classes() ) ); ?>" role="complementary" <?php responsive_schema_markup( 'sidebar' ); ?>>
-
-				<?php
-
-				Responsive\responsive_widgets(); // above widgets hook.
-				if ( ! dynamic_sidebar( 'main-sidebar' ) ) :
-				endif; // End of main-sidebar.
-				Responsive\responsive_widgets_end(); // after widgets hook.
-				?>
-
-				</aside><!-- end of #secondary -->
-				<?php
-				Responsive\responsive_widgets_after(); // after widgets container hook.
-
-	}
-} else {
+else {
 
 	$get_sidebar_position = function( $context, $default = 'no' ) {
 		$global = get_theme_mod( 'responsive_default_sidebar_position', 'no' );

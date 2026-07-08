@@ -51,7 +51,7 @@ if ( ! class_exists( 'Responsive_Addons_Pro' ) ) {
 	require $responsive_template_directory . '/core/includes/classes/class-responsive-blog-markup.php';
 }
 require $responsive_template_directory . '/core/gutenberg/gutenberg-support.php';
-require $responsive_template_directory . '/core/includes/compatibility/lifterlms/class-responsive-lifterlms.php';
+
 require $responsive_template_directory . '/core/includes/modules/related-posts/class-responsive-related-posts.php';
 require $responsive_template_directory . '/core/includes/modules/color-palette/class-responsive-global-color-palette.php';
 // Deprecated functions.
