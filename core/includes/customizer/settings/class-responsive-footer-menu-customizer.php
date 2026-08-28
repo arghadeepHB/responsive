@@ -52,6 +52,7 @@ if ( ! class_exists( 'Responsive_Footer_Menu_Customizer' ) ) :
 				$design_tab_ids_prefix . 'responsive_footer_menu_separator_2',
 				$design_tab_ids_prefix . 'responsive_footer_menu_link_color',
 				$design_tab_ids_prefix . 'responsive_footer_menu_link_separator_2',
+				$design_tab_ids_prefix . 'responsive_footer_menu_typography_group',
 			);
 
 			$general_tab_ids_prefix = 'customize-control-';
@@ -117,9 +118,19 @@ if ( ! class_exists( 'Responsive_Footer_Menu_Customizer' ) ) :
 				Responsive\Core\get_responsive_customizer_defaults( 'footer_menu_link_active' )
 			);
 
+			// Footer Menu Font.
+			$footer_menu_font_label = __( 'Font', 'responsive' );
+			responsive_typography_group_control( $wp_customize, 'footer_menu_typography_group', $footer_menu_font_label, 'responsive_footer_menu', 75, 'footer_menu_typography', true );
+
+			// Menu Item Horizontal Spacing
+			responsive_drag_number_control_with_switchers( $wp_customize, 'footer_menu_item_spacing', 'Menu Item Horizontal Spacing', 'responsive_footer_menu', 76, 12, null, 100, 0, 'postMessage', 1, null, null, array('desktop', 'tablet', 'mobile'), array('px', 'em', 'rem', 'vw') );
+
+			// Menu Item Top and Bottom Spacing
+			responsive_drag_number_control_with_switchers( $wp_customize, 'footer_menu_item_top_bottom_spacing', 'Menu Item Top and Bottom Spacing', 'responsive_footer_menu', 77, 0, null, 100, 0, 'postMessage', 1, null, null, array('desktop', 'tablet', 'mobile'), array('px', 'em', 'rem', 'vw') );
+
             // Padding.
 			$footer_menu_padding_label = __( 'Padding (px)', 'responsive' );
-			responsive_padding_control( $wp_customize, 'footer_menu', 'responsive_footer_menu', 70, 15, 15, null, $footer_menu_padding_label );
+			responsive_padding_control( $wp_customize, 'footer_menu', 'responsive_footer_menu', 80, 15, 15, null, $footer_menu_padding_label );
 
 		}
 	}
