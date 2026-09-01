@@ -11,6 +11,38 @@
                 WhenBreadcrumbUnchecked();
             }
         });
+
+        // Listen to changes on the main breadcrumb toggle
+        if ( wp.customize('responsive_theme_options[breadcrumb]') ) {
+            wp.customize('responsive_theme_options[breadcrumb]').bind(function(newval) {
+                if ( newval ) {
+                    let subSettings = [
+                        'responsive_breadcrumb_enable_home_page',
+                        'responsive_breadcrumb_enable_blog_posts_page',
+                        'responsive_breadcrumb_enable_search',
+                        'responsive_breadcrumb_enable_archive',
+                        'responsive_breadcrumb_enable_single_page',
+                        'responsive_breadcrumb_enable_single_post',
+                        'responsive_breadcrumb_enable_404_page'
+                    ];
+                    
+                    // Check if all sub-settings are false (which is the default state).
+                    // If all are false, we assume it's the "first time" enabling them, 
+                    // or the user explicitly turned them all off and we do a master reset.
+                    let allFalse = subSettings.every(function(s) {
+                        return wp.customize(s) && ( wp.customize(s).get() == false || wp.customize(s).get() == 0 );
+                    });
+                    
+                    if ( allFalse ) {
+                        subSettings.forEach(function(s) {
+                            if ( wp.customize(s) ) {
+                                wp.customize(s).set(true);
+                            }
+                        });
+                    }
+                }
+            });
+        }
     });
 
     function WhenBreadcrumbUnchecked() {
@@ -34,7 +66,11 @@
     }
 
     function isBreadcrumbEnable() {
-        let toggleControl = $('#inspector-toggle-control-0');
+        if ( typeof wp !== 'undefined' && wp.customize && wp.customize('responsive_theme_options[breadcrumb]') ) {
+            return wp.customize('responsive_theme_options[breadcrumb]').get() ? true : false;
+        }
+        
+        let toggleControl = $('#customize-control-res_breadcrumb input[type="checkbox"]');
         if (toggleControl.length) {
             let isChecked = toggleControl.is(':checked');
             return isChecked ? true : false;
@@ -60,7 +96,6 @@
             tab_ids_prefix + 'responsive_breadcrumb_separator_separator',
             tab_ids_prefix + 'responsive_content_header_alignment',
             tab_ids_prefix + 'responsive_content_header_alignment_separator',
-            tab_ids_prefix + 'responsive_content_header_padding',
             tab_ids_prefix + 'responsive_breadcrumb_display_settings_separator',
         ];
         return general_tab_ids;

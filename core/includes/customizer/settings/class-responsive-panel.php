@@ -84,8 +84,8 @@ if ( ! class_exists( 'Responsive_Panel' ) ) :
 				$tab_ids_prefix . 'responsive_breadcrumb_separator_separator',
 				$tab_ids_prefix . 'responsive_content_header_alignment',
 				$tab_ids_prefix . 'responsive_content_header_alignment_separator',
-				$tab_ids_prefix . 'responsive_content_header_padding',
 				$tab_ids_prefix . 'responsive_breadcrumb_display_settings_separator',
+				$tab_ids_prefix . 'responsive_breadcrumb_source'
 			);
 
 			responsive_tabs_button_control( $wp_customize, 'breadcrumb_tabs', $tabs_label, 'responsive_breadcrumb', 10, '', 'responsive_breadcrumb_general_tab', 'responsive_breadcrumb_design_tab', $general_tab_ids, $design_tab_ids, null );

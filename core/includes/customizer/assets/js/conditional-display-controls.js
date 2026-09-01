@@ -198,29 +198,6 @@
 	);
 
 	api(
-		"responsive_theme_options['breadcrumb']",
-		function( $swipe ) {
-			$swipe.bind(
-				function( newval ) {
-					switch (newval) {
-						case true:
-							api.control( 'responsive_breadcrumb_position' ).toggle( false );
-							api.control( 'responsive_breadcrumb_color' ).toggle( false );
-							break;
-						/**
-						 * The select was switched to »show«.
-						 */
-						case false:
-							api.control( 'responsive_breadcrumb_position' ).toggle( true );
-							api.control( 'responsive_breadcrumb_color' ).toggle( true );
-							break;
-					}
-				}
-			);
-		}
-	);
-
-	api(
 		"responsive_blog_entry_columns",
 		function( $swipe ) {
 			$swipe.bind(
