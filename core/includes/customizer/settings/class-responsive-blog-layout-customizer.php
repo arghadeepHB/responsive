@@ -212,7 +212,7 @@ if ( ! class_exists( 'Responsive_Blog_Layout_Customizer' ) ) :
 			$wp_customize->add_setting(
 				'responsive_blog_title_elements_positioning',
 				array(
-					'default'           => array( 'title', 'description', 'breadcrumb' ),
+					'default'           => array( 'title', 'description' ),
 					'sanitize_callback' => 'responsive_sanitize_multi_choices',
 					'transport'         => 'refresh',
 				)

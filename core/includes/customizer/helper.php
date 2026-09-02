@@ -56,7 +56,7 @@ if ( ! function_exists( 'responsive_blog_entry_elements_positioning' ) ) {
 	function responsive_blog_entry_elements_positioning() {
 
 		// Default sections.
-		$sections = array( 'featured_image', 'categories', 'title', 'meta', 'content' );
+		$sections = Responsive\Core\get_responsive_customizer_defaults( 'blog_entry_elements_positioning' );
 
 		// Get sections from Customizer.
 		$sections = get_theme_mod( 'responsive_blog_entry_elements_positioning', $sections );
@@ -115,6 +115,7 @@ if ( ! function_exists( 'responsive_blog_single_elements' ) ) {
 		$elements = apply_filters(
 			'responsive_blog_single_elements',
 			array(
+				'breadcrumb'     => esc_html__( 'Breadcrumb', 'responsive' ),
 				'categories'     => esc_html__( 'Categories', 'responsive' ),
 				'title'          => esc_html__( 'Title', 'responsive' ),
 				'featured_image' => esc_html__( 'Featured Image', 'responsive' ),
@@ -139,9 +140,9 @@ if ( ! function_exists( 'responsive_blog_single_elements_positioning' ) ) {
 	function responsive_blog_single_elements_positioning() {
 
 		// Default sections.
-		$sections = array( 'categories', 'title', 'meta', 'featured_image' );
+		$sections = Responsive\Core\get_responsive_customizer_defaults( 'blog_single_elements_positioning' );
 
-		// Get sections from Customizer.
+		// Get sections from Customizer
 		$sections = get_theme_mod( 'responsive_blog_single_elements_positioning', $sections );
 
 		// Turn into array if string.
@@ -296,9 +297,9 @@ if ( ! function_exists( 'responsive_page_elements' ) ) {
 		$elements = apply_filters(
 			'responsive_page_elements',
 			array(
+				'breadcrumbs'    => esc_html__( 'Breadcrumbs', 'responsive' ),
 				'title'          => esc_html__( 'Title', 'responsive' ),
 				'featured_image' => esc_html__( 'Featured Image', 'responsive' ),
-				'breadcrumbs'    => esc_html__( 'Breadcrumbs', 'responsive' ),
 				'excerpt'        => esc_html__( 'Excerpt', 'responsive' ),
 				'meta'           => esc_html__( 'Meta', 'responsive' ),
 			)
@@ -458,7 +459,7 @@ if ( ! function_exists( 'responsive_page_single_elements_positioning' ) ) {
 	function responsive_page_single_elements_positioning() {
 
 		// Default sections.
-		$sections = array( 'title', 'featured_image', 'content' );
+		$sections = array( 'breadcrumb', 'title', 'featured_image', 'content' );
 
 		// Get sections from Customizer.
 		$sections = get_theme_mod( 'responsive_page_single_elements_positioning', $sections );
