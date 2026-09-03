@@ -200,8 +200,34 @@ if ( ! class_exists( 'Responsive_Typography_Customizer' ) ) :
 				'single_blog_breadcrumb' => array(
 					'label'    => esc_html__( 'Breadcrumb Font', 'responsive' ),
 					'target'   => $selectorArray['single_blog_breadcrumb'],
-					'section'  => 'responsive_single_blog_layout',
+					'section'  => 'responsive_single_blog_post_title_layout',
 					'priority' => 109,
+					'exclude'  => array( 'font-color' ),
+					'defaults' => array(
+						'font-size'   => '13px',
+						'line-height' => '1.75',
+					),
+				),
+
+				// Blog - Breadcrumb Font.
+				'blog_breadcrumb' => array(
+					'label'    => esc_html__( 'Breadcrumb Font', 'responsive' ),
+					'target'   => $selectorArray['blog_breadcrumb'],
+					'section'  => 'responsive_blog_layout',
+					'priority' => 132,
+					'exclude'  => array( 'font-color' ),
+					'defaults' => array(
+						'font-size'   => '13px',
+						'line-height' => '1.75',
+					),
+				),
+
+				// Page Breadcrumb - Breadcrumb Font
+				'page_breadcrumb' => array(
+					'label'    => esc_html__( 'Breadcrumb Font', 'responsive' ),
+					'target'   => $selectorArray['page_breadcrumb'],
+					'section'  => 'responsive_page_title_area_layout',
+					'priority' => 47,
 					'exclude'  => array( 'font-color' ),
 					'defaults' => array(
 						'font-size'   => '13px',
@@ -767,6 +793,8 @@ if ( ! class_exists( 'Responsive_Typography_Customizer' ) ) :
 				'item_category'              => '.blog .hentry .entry-meta .entry-category a, .archive .hentry .entry-meta .entry-category a', 
 				'item_meta'             	 => '.blog .hentry .post-meta .entry-tag span, .blog .hentry .post-meta .entry-tag span a, .blog .hentry .post-meta span.entry-date .posted time, .archive .hentry .post-meta span, .archive .hentry .post-meta span.entry-date .posted time, .blog .container .hentry .post-entry .post-meta .entry-author .author a span', 
 				'single_blog_breadcrumb'     => '.single.single-post .breadcrumbs .breadcrumb-list',
+				'blog_breadcrumb' 			 => '.blog .breadcrumbs .breadcrumb-list',
+				'page_breadcrumb'            => '.page .breadcrumbs .breadcrumb-list',
 				'single_blog_post_text'      => '.single-post .entry-header *:not(.post-meta):not(.post-meta *):not(.post-title), .responsive-blog-single-banner2 .container *:not(.post-meta):not(.post-meta *):not(.post-title)',
 				'single_blog_post_title'     => '.single-post .site-content article .post-entry .post-title, .single-post .responsive-blog-single-banner2 .post-title',
 				'single_blog_post_meta'      => '.single-post .site-content article .post-entry .post-meta span, .single-post .site-content article .post-entry .post-meta i, .single-post .site-content article .post-entry .post-meta span a, .single-post .site-content article .post-entry .post-meta span a time, .single-post .site-content article .post-entry .entry-meta, .responsive-blog-single-banner2 .container .post-meta span, .responsive-blog-single-banner2 .container .post-meta i, .responsive-blog-single-banner2 .container .post-meta span a, .responsive-blog-single-banner2 .container .post-meta span a time, .responsive-blog-single-banner2 .container .entry-meta',

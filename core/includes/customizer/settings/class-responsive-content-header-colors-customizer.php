@@ -45,13 +45,24 @@ if ( ! class_exists( 'Responsive_Content_Header_Colors_Customizer' ) ) :
 			$content_header_description_color_label = __( 'Description Color', 'responsive' );
 			responsive_color_control( $wp_customize, 'content_header_description', $content_header_description_color_label, 'responsive_content_header_layout', 60, Responsive\Core\get_responsive_customizer_defaults( 'content_header_description' ), null, null );
 
-			// Breadcrumb Color.
-			$breadcrumb_color_label = __( 'Breadcrumb Color', 'responsive' );
+			// Breadcrumb Text Color.
+			$breadcrumb_color_label = __( 'Text Color', 'responsive' );
 			responsive_color_control( $wp_customize, 'breadcrumb', $breadcrumb_color_label, 'responsive_breadcrumb', 70, Responsive\Core\get_responsive_customizer_defaults( 'breadcrumb' ) );
 
-			responsive_horizontal_separator_control($wp_customize, 'breadcrumb_typography_separator', 1, 'responsive_breadcrumb', 72, 1, );
+			// Breadcrumb Link Color
+			$breadcrumb_link_color_label = __( 'Link Color', 'responsive' );
+			responsive_color_control_with_device_switchers( $wp_customize, 'breadcrumb_link', $breadcrumb_link_color_label, 'responsive_breadcrumb', 72, Responsive\Core\get_responsive_customizer_defaults( 'breadcrumb_link' ), null, '', 'postMessage', true );
 
+			// Breadcrumb Link Hover Color
+			$breadcrumb_link_hover_color_label = __( 'Link Hover Color', 'responsive' );
+			responsive_color_control_with_device_switchers( $wp_customize, 'breadcrumb_link_hover', $breadcrumb_link_hover_color_label, 'responsive_breadcrumb', 73, Responsive\Core\get_responsive_customizer_defaults( 'breadcrumb_link_hover' ), null, '', 'postMessage', true );
+			
+			// Breadcrumb Background Color
+			$breadcrumb_background_color_label = __( 'Background Color', 'responsive' );
+			responsive_color_control_with_device_switchers( $wp_customize, 'breadcrumb_background', $breadcrumb_background_color_label, 'responsive_breadcrumb', 74, Responsive\Core\get_responsive_customizer_defaults( 'breadcrumb_background' ), null, '', 'postMessage', true );
 
+			// Breadcrumb Background Separator
+			responsive_horizontal_separator_control($wp_customize, 'breadcrumb_background_separator', 1, 'responsive_breadcrumb', 75, 1, );			
 		}
 
 

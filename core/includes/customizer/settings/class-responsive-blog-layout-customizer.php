@@ -177,7 +177,8 @@ if ( ! class_exists( 'Responsive_Blog_Layout_Customizer' ) ) :
 				'customize-control-responsive_blog_post_link_hover_separator',
 				'customize-control-responsive_blog_post_title_typography_group',
 				'customize-control-responsive_blog_post_text_typography_group',
-				'customize-control-responsive_blog_post_text_typography_group_separator'
+				'customize-control-responsive_blog_post_text_typography_group_separator',
+				'customize-control-responsive_blog_post_breadcrumb_background'
 			];
 			
 			// Blog Title Area Toggle
@@ -338,7 +339,11 @@ if ( ! class_exists( 'Responsive_Blog_Layout_Customizer' ) ) :
 			$blog_post_link_hover_color_label = __( 'Link Hover Color', 'responsive' );
 			responsive_color_control( $wp_customize, 'blog_post_link_hover', $blog_post_link_hover_color_label, 'responsive_blog_title_layout', 30, Responsive\Core\get_responsive_customizer_defaults( 'single_blog_post_link_hover_color' ) );
 
-			responsive_horizontal_separator_control( $wp_customize, 'blog_post_link_hover_separator', 1, 'responsive_blog_title_layout',30, 1 );
+			// Blog Post Breadcrumb Background Color
+			$blog_post_breadcrumb_background_color_label = __( 'Breadcrumb Background Color', 'responsive' );
+			responsive_color_control( $wp_customize, 'blog_post_breadcrumb_background', $blog_post_breadcrumb_background_color_label, 'responsive_blog_title_layout', 31, Responsive\Core\get_responsive_customizer_defaults( 'single_blog_post_breadcrumb_background_color' ) );
+
+			responsive_horizontal_separator_control( $wp_customize, 'blog_post_link_hover_separator', 1, 'responsive_blog_title_layout',32, 1 );
 
 			// Blog Post Title Font
 			$blog_post_title_typography_label = __( 'Title Font', 'responsive' );
@@ -348,7 +353,11 @@ if ( ! class_exists( 'Responsive_Blog_Layout_Customizer' ) ) :
 			$blog_post_text_typography_label = __( 'Text Font', 'responsive' );
 			responsive_typography_group_control( $wp_customize, 'blog_post_text_typography_group', $blog_post_text_typography_label, 'responsive_blog_title_layout', 40, 'blog_post_text_typography', true );
 
-			responsive_horizontal_separator_control( $wp_customize, 'blog_post_text_typography_group_separator', 1, 'responsive_blog_title_layout',41, 1 );
+			// Breadcrumb Font
+			$blog_breadcrumb_typography_label = esc_html__( 'Breadcrumb Font', 'responsive' );
+			responsive_typography_group_control( $wp_customize, 'blog_breadcrumb_typography_group', $blog_breadcrumb_typography_label, 'responsive_blog_title_layout', 41, 'blog_breadcrumb_typography' );
+
+			responsive_horizontal_separator_control( $wp_customize, 'blog_post_text_typography_group_separator', 1, 'responsive_blog_title_layout',42, 1 );
 
 			$wp_customize->add_setting(
 				'responsive_theme_options[blog_post_title_text]',

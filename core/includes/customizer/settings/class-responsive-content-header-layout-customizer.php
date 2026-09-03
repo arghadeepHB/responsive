@@ -124,8 +124,6 @@ if ( ! class_exists( 'Responsive_Content_Header_Layout_Customizer' ) ) :
 			}
 			responsive_select_button_control( $wp_customize, 'content_header_alignment', $content_header_alignment_label, 'responsive_breadcrumb', 30, $content_header_alignment_choices, Responsive\Core\get_responsive_customizer_defaults( 'breadcrumb_alignment' ), 'responsive_active_breadcrumb', 'postMessage' );
 
-			responsive_horizontal_separator_control( $wp_customize, 'content_header_alignment_separator', 1, 'responsive_breadcrumb',30, 1, 'responsive_active_breadcrumb' );
-
 			// Breadcrumb Separator Text.
 			$wp_customize->add_setting(
 				'responsive_breadcrumb_unicode',

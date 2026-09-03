@@ -10738,20 +10738,6 @@ function responsive_customizer_styles() {
 			$custom_css .= "}}";
 		}
 
-		// Single Post — Breadcrumb Color.
-		$single_blog_breadcrumb_color = esc_html(
-			get_theme_mod(
-				'responsive_single_blog_breadcrumb_color',
-				Responsive\Core\get_responsive_customizer_defaults( 'breadcrumb' )
-			)
-		);
-
-		$custom_css .= "
-		.single.single-post #wrapper .site-content-header .breadcrumbs .breadcrumb-list a span,
-		.single.single-post #wrapper .site-content-header .breadcrumbs .breadcrumb-list span{
-			color: {$single_blog_breadcrumb_color};
-		}";
-
 		// Single Post — Breadcrumb Font.
 		$single_blog_breadcrumb_typography = get_theme_mod( 'single_blog_breadcrumb_typography' );
 		if ( $single_blog_breadcrumb_typography && is_array( $single_blog_breadcrumb_typography ) ) {
