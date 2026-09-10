@@ -81,7 +81,7 @@ if ( ! class_exists( 'Responsive_Woocommerce_Shop_Layout_Customizer' ) ) :
 				$general_tab_ids_prefix . 'responsive_product_catalog_container_style',
 			);
 			
-			$enable_native_popup_flag = get_theme_mod('enable_native_cart_popup');
+			$enable_native_popup_flag = get_theme_mod( 'responsive_enable_native_cart_popup' );
 			
 			$native_general_pop_up_options = array(
 			$general_tab_ids_prefix . 'responsive_native_cart_popup_display',
