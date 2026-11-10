@@ -3624,6 +3624,19 @@ if( ! function_exists( 'responsive_prepare_css_value' ) ) {
 
 		$value = trim( $value );
 
+		// Custom palette colors (palette9+) may have been removed: fall back to the default.
+		if ( preg_match( '/^palette(\d+)$/', $value, $palette_match ) && (int) $palette_match[1] >= 9
+			&& ! \Reponsive\Core\GlobalPalette\Responsive_Global_Color_Palette::custom_color_exists( (int) $palette_match[1] ) ) {
+			$fallback = is_string( $default ) ? trim( $default ) : '';
+			if ( '' === $fallback || $fallback === $value ) {
+				return '';
+			}
+			if ( preg_match( '/^palette(\d+)$/', $fallback, $fb ) && (int) $fb[1] >= 9 ) {
+				return '';
+			}
+			$value = $fallback;
+		}
+
 		if ( is_string( $value ) && ( preg_match( '/^palette\d+$/', $value ) || false !== strpos( $value, 'headings-color' ) || false !== strpos( $value, 'site-background' ) || false !== strpos( $value, 'box-background' ) || false !== strpos( $value, 'h1-color' ) || false !== strpos( $value, 'footer-text-color' ) || false !== strpos( $value, 'footer-links-color' ) || false !== strpos( $value, 'footer-links-hover-color' ) || false !== strpos( $value, 'breadcrumb' ) ) || false !== strpos( $value, 'meta-text-color' ) ) {
 			return 'var(--responsive-global-' . $value . ')';
 		}
