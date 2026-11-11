@@ -78,6 +78,28 @@ export const usePaletteList = () => {
 };
 
 /**
+ * Whether a raw CSS color (hex, rgb(a), named...) is light, so a contrasting tick can be chosen.
+ */
+const isLightCssColor = ( color ) => {
+	try {
+		if ( ! color ) return false;
+		const probe = document.createElement( 'span' );
+		probe.style.display = 'none';
+		probe.style.color = color;
+		document.body.appendChild( probe );
+		const rgb = getComputedStyle( probe ).color;
+		document.body.removeChild( probe );
+		const m = rgb.match( /rgba?\(([^)]+)\)/ );
+		if ( ! m ) return false;
+		const [ r, g, b, a = 1 ] = m[ 1 ].split( /[,\s/]+/ ).filter( Boolean ).map( Number );
+		if ( a < 0.5 ) return true; // Mostly transparent shows the light panel behind it.
+		return ( 0.299 * r + 0.587 * g + 0.114 * b ) > 150;
+	} catch ( e ) {
+		return false;
+	}
+};
+
+/**
  * Row of palette swatches. Clicking one links the control to that palette color.
  */
 export const PaletteLinkRow = ( { value, onSelect } ) => {
@@ -98,7 +120,7 @@ export const PaletteLinkRow = ( { value, onSelect } ) => {
 						onClick={ () => onSelect( item.id ) }
 					>
 						{ selected && (
-							<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+							<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={ isLightCssColor( item.color ) ? '#000' : '#fff' } strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
 						) }
 					</button>
 				);
