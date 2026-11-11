@@ -367,7 +367,7 @@ const PaletteComponent = props => {
             }
             else if(settingId === "responsive_global_color_palette_headings_color")
             {
-                return "#404040";
+                return "#3B82F6";
             }
             else if(settingId === "responsive_global_color_palette_accent_color")
             {

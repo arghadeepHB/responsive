@@ -55,7 +55,7 @@ if ( ! class_exists( 'Responsive_Site_Color_Palettes_Scheme_Customizer' ) ) :
 				'responsive_global_color_palette_accent_color'          => '#3B82F6',
 				'responsive_global_color_palette_link_hover_color'      => '#10659C',
 				'responsive_global_color_palette_text_color'            => '#404040',
-				'responsive_global_color_palette_headings_color'        => '#404040',
+				'responsive_global_color_palette_headings_color'        => '#3B82F6',
 				'responsive_global_color_palette_content_bg_color'      => '#ffffff',
 				'responsive_global_color_palette_site_background_color' => '#f8fafc',
 				'responsive_global_color_palette_alt_background_color'  => '#ffffff',

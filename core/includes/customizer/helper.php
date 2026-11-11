@@ -3011,7 +3011,7 @@ function responsive_get_available_design_styles() {
 						'accent'            => '#3B82F6',
 						'link_hover'		=> '#10659C',
 						'text'              => '#404040',
-						'header_text'       => '#404040',
+						'header_text'       => '#3B82F6',
 						'content_background' => '#ffffff',
 						'site_background'   => '#f0f5fa',
 						'alt_background'    => '#ffffff',
@@ -5046,7 +5046,7 @@ function responsive_button_presets_control( $wp_customize, $element, $label, $se
  * @param  [type]  $desc         [description].
  * @return void [description].
  */
-function responsive_color_control_with_device_switchers( $wp_customize, $element, $label, $section, $priority, $default, $active_call = null, $desc='', $transport = 'postMessage', $has_reset = false ) {
+function responsive_color_control_with_device_switchers( $wp_customize, $element, $label, $section, $priority, $default, $active_call = null, $desc='', $transport = 'postMessage', $has_reset = true ) {
 
 	$wp_customize->add_setting(
 		'responsive_' . $element . '_color',
@@ -5112,7 +5112,7 @@ function responsive_color_control_with_device_switchers( $wp_customize, $element
  * @param  [type]  $transport     [description].
  * @return void [description].
  */
-function responsive_color_control_with_device_switchers_and_hover( $wp_customize, $element, $label, $section, $priority, $default, $default_hover = '', $active_call = null, $desc='', $transport = 'postMessage' ) {
+function responsive_color_control_with_device_switchers_and_hover( $wp_customize, $element, $label, $section, $priority, $default, $default_hover = '', $active_call = null, $desc='', $transport = 'postMessage', $has_reset = true ) {
 
 	// Normal color settings for each device
 	$wp_customize->add_setting(
@@ -5188,6 +5188,7 @@ function responsive_color_control_with_device_switchers_and_hover( $wp_customize
 				'priority'        => $priority,
 				'active_callback' => $active_call,
 				'description'     => $desc,
+				'has_reset'       => $has_reset,
 			)
 		)
 	);
