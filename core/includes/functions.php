@@ -644,8 +644,12 @@ function responsive_add_custom_body_classes( $classes ) {
 		$classes[] = 'responsive-site-style-' . $woo_style;
 	}
 
-	if ( null === $woo_style && is_page() ) {
-		$page_container_style = get_theme_mod( 'responsive_page_container_style', 'default' );
+	if ( null === $woo_style && is_singular( array( 'page', 'post' ) ) ) {
+		// This page/post's own Container Style > post type setting > global (Default).
+		$page_container_style = get_post_meta( get_the_ID(), 'responsive_page_meta_container_style', true );
+		if ( ! $page_container_style ) {
+			$page_container_style = get_theme_mod( is_page() ? 'responsive_page_container_style' : 'responsive_single_blog_container_style', 'default' );
+		}
 		if ( 'default' !== $page_container_style ) {
 			$classes    = array_diff( $classes, array( 'responsive-site-style-' . get_theme_mod( 'responsive_style', 'boxed' ) ) );
 			$classes[]  = 'responsive-site-style-' . $page_container_style;
@@ -763,7 +767,10 @@ function responsive_add_custom_body_classes( $classes ) {
 
 			// Single Blog sidebar Position.
 			$global_sidebar_position   = get_theme_mod( 'responsive_default_sidebar_position', 'no' );
-			$single_blog_sidebar_value = get_theme_mod( 'responsive_single_blog_sidebar_position', 'global' );
+			$single_blog_sidebar_value = get_post_meta( get_the_ID(), 'responsive_page_meta_sidebar_position', true );
+			if ( ! $single_blog_sidebar_value ) {
+				$single_blog_sidebar_value = get_theme_mod( 'responsive_single_blog_sidebar_position', 'global' );
+			}
 
 			$classes[] = 'sidebar-position-' . (
 				( $single_blog_sidebar_value === 'global' || $single_blog_sidebar_value === 'default' ) ? $global_sidebar_position : $single_blog_sidebar_value
@@ -1150,7 +1157,10 @@ function responsive_is_narrow_container_layout() {
 			$container_layout = get_theme_mod( 'responsive_page_container_layout', 'default' );
 		}
 	} elseif ( is_single() ) {
-		$container_layout = get_theme_mod( 'responsive_single_blog_container_layout', 'default' );
+		$container_layout = get_post_meta( get_the_ID(), 'responsive_page_meta_container_layout', true );
+		if ( ! $container_layout ) {
+			$container_layout = get_theme_mod( 'responsive_single_blog_container_layout', 'default' );
+		}
 	} elseif ( ! is_singular() && ( is_home() || is_archive() ) && ! is_search() ) {
 		$container_layout = get_theme_mod( 'responsive_blog_container_layout', 'default' );
 	}
@@ -1182,7 +1192,10 @@ function responsive_add_container_layout_body_classes( $classes ) {
 			$container_layout = get_theme_mod( 'responsive_page_container_layout', 'default' );
 		}
 	} elseif ( is_single() ) {
-		$container_layout = get_theme_mod( 'responsive_single_blog_container_layout', 'default' );
+		$container_layout = get_post_meta( get_the_ID(), 'responsive_page_meta_container_layout', true );
+		if ( ! $container_layout ) {
+			$container_layout = get_theme_mod( 'responsive_single_blog_container_layout', 'default' );
+		}
 	} elseif ( ! is_singular() && ( is_home() || is_archive() ) && ! is_search() ) {
 		$container_layout = get_theme_mod( 'responsive_blog_container_layout', 'default' );
 	}
@@ -1322,6 +1335,16 @@ if ( ! function_exists( 'responsive_is_transparent_header' ) ) {
 	 * Returns true if transparent header is enabled
 	 */
 	function responsive_is_transparent_header() {
+		// This page / post's own Transparent Header setting ('1' = enabled, 'disabled' = disabled) wins; empty = inherit.
+		if ( is_singular( array( 'page', 'post' ) ) ) {
+			$entry_setting = get_post_meta( get_queried_object_id(), 'responsive_page_meta_transparent_header', true );
+			if ( 'disabled' === $entry_setting ) {
+				return false;
+			}
+			if ( '1' === $entry_setting ) {
+				return true;
+			}
+		}
 		$enable_trans_header = get_theme_mod( 'responsive_transparent_header', 0 ) || ( is_page() && get_post_meta( get_the_ID(), 'responsive_page_meta_transparent_header', true ) ) ? true : false;
 		if ( $enable_trans_header ) {
 

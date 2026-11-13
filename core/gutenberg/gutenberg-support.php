@@ -1088,3 +1088,201 @@ function responsive_block_styles() {
 	wp_add_inline_style( 'responsive-style', responsive_gutenberg_colors( responsive_gutenberg_color_palette() ) );
 }
 add_action( 'enqueue_block_editor_assets', 'responsive_block_styles' );
+
+/**
+ * Register post meta used by the Responsive settings sidebar.
+ */
+function responsive_register_page_settings_meta() {
+	$meta_keys = array(
+		'responsive_page_meta_container_layout' => array( 'normal', 'narrow', 'full-width' ),
+		'responsive_page_meta_container_style'  => array( 'boxed', 'content-boxed', 'flat' ),
+		'responsive_page_meta_sidebar_position' => array( 'no', 'left', 'right' ),
+		'responsive_page_meta_sidebar_style'    => array( 'boxed', 'unboxed' ),
+	);
+	foreach ( array( 'page', 'post' ) as $post_type ) {
+		foreach ( $meta_keys as $meta_key => $allowed ) {
+			register_post_meta(
+				$post_type,
+				$meta_key,
+				array(
+					'type'              => 'string',
+					'single'            => true,
+					'default'           => '',
+					'show_in_rest'      => true,
+					'sanitize_callback' => function ( $value ) use ( $allowed ) {
+						return in_array( $value, $allowed, true ) ? $value : '';
+					},
+					'auth_callback'     => function () {
+						return current_user_can( 'edit_posts' );
+					},
+				)
+			);
+		}
+	}
+}
+add_action( 'init', 'responsive_register_page_settings_meta' );
+
+/**
+ * Register the per-entry sidebar width meta (20-50 %, 0 / empty = use the post type setting).
+ */
+function responsive_register_sidebar_width_meta() {
+	foreach ( array( 'page', 'post' ) as $post_type ) {
+		register_post_meta(
+			$post_type,
+			'responsive_page_meta_sidebar_width',
+			array(
+				'type'              => 'integer',
+				'single'            => true,
+				'default'           => 0,
+				'show_in_rest'      => true,
+				'sanitize_callback' => function ( $value ) {
+					$value = (int) $value;
+					return ( $value >= 20 && $value <= 50 ) ? $value : 0;
+				},
+				'auth_callback'     => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
+	}
+}
+add_action( 'init', 'responsive_register_sidebar_width_meta' );
+
+/**
+ * Register the per-entry "Disable Elements" meta (header, footer, banner area, related posts).
+ */
+function responsive_register_disable_elements_meta() {
+	$keys = array(
+		'responsive_page_meta_disable_header'        => array( 'page', 'post' ),
+		'responsive_page_meta_disable_footer'        => array( 'page', 'post' ),
+		'responsive_page_meta_disable_banner'        => array( 'page', 'post' ),
+		'responsive_page_meta_disable_related_posts' => array( 'post' ),
+		// Advanced settings: individual header rows.
+		'responsive_page_meta_disable_above_header'   => array( 'page', 'post' ),
+		'responsive_page_meta_disable_primary_header' => array( 'page', 'post' ),
+		'responsive_page_meta_disable_below_header'   => array( 'page', 'post' ),
+		'responsive_page_meta_disable_mobile_header'  => array( 'page', 'post' ),
+	);
+	foreach ( $keys as $meta_key => $post_types ) {
+		foreach ( $post_types as $post_type ) {
+			register_post_meta(
+				$post_type,
+				$meta_key,
+				array(
+					'type'              => 'boolean',
+					'single'            => true,
+					'default'           => false,
+					'show_in_rest'      => true,
+					'sanitize_callback' => 'rest_sanitize_boolean',
+					'auth_callback'     => function () {
+						return current_user_can( 'edit_posts' );
+					},
+				)
+			);
+		}
+	}
+}
+add_action( 'init', 'responsive_register_disable_elements_meta' );
+
+/**
+ * Register the per-entry Transparent Header meta ('' = inherit, '1' = enabled, 'disabled' = disabled).
+ */
+function responsive_register_transparent_header_meta() {
+	foreach ( array( 'page', 'post' ) as $post_type ) {
+		register_post_meta(
+			$post_type,
+			'responsive_page_meta_transparent_header',
+			array(
+				'type'              => 'string',
+				'single'            => true,
+				'default'           => '',
+				'show_in_rest'      => true,
+				'sanitize_callback' => function ( $value ) {
+					return in_array( $value, array( '1', 'disabled' ), true ) ? $value : '';
+				},
+				'auth_callback'     => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			)
+		);
+	}
+}
+add_action( 'init', 'responsive_register_transparent_header_meta' );
+
+/**
+ * Data the editor script needs to preview the container layout.
+ *
+ * @return array
+ */
+function responsive_get_page_settings_preview_data() {
+	$container_width = (int) get_theme_mod( 'responsive_container_width', Responsive\Core\get_responsive_customizer_defaults( 'responsive_container_width' ) );
+	$narrow_width    = (int) get_theme_mod( 'responsive_narrow_container_width', Responsive\Core\get_responsive_customizer_defaults( 'responsive_narrow_container_width' ) );
+	$global          = get_theme_mod( 'responsive_width', 'contained' );
+	$global          = in_array( $global, array( 'narrow', 'full-width' ), true ) ? $global : 'normal';
+	$global_sidebar  = get_theme_mod( 'responsive_default_sidebar_position', 'no' );
+
+	$types = array(
+		'page' => array( 'responsive_page_container_layout', 'responsive_page_sidebar_position', 'responsive_page_sidebar_width', 'responsive_page_content_width', 'page_content_width' ),
+		'post' => array( 'responsive_single_blog_container_layout', 'responsive_single_blog_sidebar_position', 'responsive_single_blog_sidebar_width', 'responsive_single_blog_content_width', 'single_blog_content_width' ),
+	);
+	$post_types = array();
+	foreach ( $types as $type => $mods ) {
+		$sidebar = get_theme_mod( $mods[1] );
+		if ( ! $sidebar || 'global' === $sidebar || 'default' === $sidebar ) {
+			$sidebar       = $global_sidebar;
+			$sidebar_width = (int) get_theme_mod( 'responsive_default_sidebar_width', 30 );
+		} else {
+			$sidebar_width = (int) get_theme_mod( $mods[2], 30 );
+		}
+		$content_pct = (int) get_theme_mod( $mods[3], Responsive\Core\get_responsive_customizer_defaults( $mods[4] ) );
+		$layout      = get_theme_mod( $mods[0], 'default' );
+		$style       = get_theme_mod( 'responsive_' . ( 'page' === $type ? 'page' : 'single_blog' ) . '_container_style', 'default' );
+
+		$post_types[ $type ] = array(
+			'sidebar'      => $sidebar ? $sidebar : 'no',
+			'sidebarWidth' => $sidebar_width,
+			'typeSidebarWidth' => (int) get_theme_mod( $mods[2], 30 ),
+			'contentPct'   => $content_pct,
+			'style'        => in_array( $style, array( 'boxed', 'content-boxed', 'flat' ), true ) ? $style : '',
+			'layout'       => in_array( $layout, array( 'normal', 'narrow', 'full-width' ), true ) ? $layout : '',
+			// Share of the container used by the content (narrow layouts never have a sidebar).
+			'factor'       => ( 'no' !== $sidebar && $sidebar ) ? ( 100 - $sidebar_width ) / 100 : $content_pct / 100,
+			'narrowFactor' => $content_pct / 100,
+		);
+	}
+
+	return array(
+		'imagesUrl'      => get_template_directory_uri() . '/core/includes/customizer/assets/images/',
+		'isRtl'          => is_rtl(),
+		'globalLayout'   => $global,
+		'globalStyle'    => in_array( get_theme_mod( 'responsive_style', 'boxed' ), array( 'content-boxed', 'flat' ), true ) ? get_theme_mod( 'responsive_style', 'boxed' ) : 'boxed',
+		'boxBackground'  => esc_html( get_theme_mod( 'responsive_box_background_color', '#ffffff' ) ),
+		'containerWidth' => $container_width,
+		'narrowWidth'    => $narrow_width,
+		'postTypes'      => $post_types,
+	);
+}
+
+/**
+ * Enqueue the Responsive settings sidebar (page/post specific controls) in the block editor.
+ */
+function responsive_enqueue_page_settings_sidebar() {
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	if ( $screen && ! in_array( $screen->post_type, array( 'page', 'post' ), true ) ) {
+		return;
+	}
+	wp_enqueue_script(
+		'responsive-page-settings-sidebar',
+		get_template_directory_uri() . '/core/js/responsive-page-settings-sidebar.js',
+		array( 'wp-plugins', 'wp-element', 'wp-data', 'wp-i18n', 'wp-components', 'wp-editor', 'wp-edit-post' ),
+		RESPONSIVE_THEME_VERSION,
+		true
+	);
+	wp_localize_script(
+		'responsive-page-settings-sidebar',
+		'responsivePageSettings',
+		responsive_get_page_settings_preview_data()
+	);
+	wp_enqueue_style( 'responsive-page-settings-sidebar', get_template_directory_uri() . '/core/css/responsive-page-settings-sidebar.css', array(), RESPONSIVE_THEME_VERSION );
+}
+add_action( 'enqueue_block_editor_assets', 'responsive_enqueue_page_settings_sidebar' );

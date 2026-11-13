@@ -4415,7 +4415,7 @@ function responsive_target_rules_for_related_posts() {
 
 	$allow_related_posts = false;
 
-	if ( 1 === get_theme_mod( 'responsive_single_blog_enable_related_posts', 0 ) && is_singular( 'post' ) ) {
+	if ( 1 === get_theme_mod( 'responsive_single_blog_enable_related_posts', 0 ) && is_singular( 'post' ) && ! responsive_is_element_disabled( 'related_posts' ) ) {
 		$allow_related_posts = true;
 	}
 

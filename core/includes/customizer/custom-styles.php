@@ -188,7 +188,10 @@ function responsive_customizer_styles() {
 	$transparent_header_logo_custom_width_mobile = esc_html( get_theme_mod( 'responsive_transparent_header_logo_width_mobile' ) );
 
 	$global_sidebar_position = get_theme_mod( 'responsive_default_sidebar_position', 'no' );
-	$page_sidebar_setting = get_theme_mod( 'responsive_page_sidebar_position', 'global' );
+	$page_sidebar_setting = is_page() ? get_post_meta( get_the_ID(), 'responsive_page_meta_sidebar_position', true ) : '';
+	if ( ! $page_sidebar_setting ) {
+		$page_sidebar_setting = get_theme_mod( 'responsive_page_sidebar_position', 'global' );
+	}
 	$responsive_page_sidebar_position = esc_html( ($page_sidebar_setting === 'global' || $page_sidebar_setting === 'default') ? $global_sidebar_position : $page_sidebar_setting);
 	if ( Responsive\Core\responsive_is_narrow_container_layout() ) {
 		$responsive_page_sidebar_width = 0; 
@@ -200,7 +203,7 @@ function responsive_customizer_styles() {
 	}
 	else if( $page_sidebar_setting === 'left' || $page_sidebar_setting === 'right' )
 	{
-		$responsive_page_sidebar_width = esc_html(get_theme_mod('responsive_page_sidebar_width', 30)); 
+		$responsive_page_sidebar_width = esc_html( responsive_get_post_sidebar_meta( 'width' ) ?: get_theme_mod( 'responsive_page_sidebar_width', 30 ) );
 		$page_primary_content_area_width  = 100 - $responsive_page_sidebar_width;
 	}
 	else 
@@ -235,7 +238,10 @@ function responsive_customizer_styles() {
 
 	}
 
-	$single_blog_sidebar_setting = get_theme_mod('responsive_single_blog_sidebar_position', 'global');
+	$single_blog_sidebar_setting = is_single() ? get_post_meta( get_the_ID(), 'responsive_page_meta_sidebar_position', true ) : '';
+	if ( ! $single_blog_sidebar_setting ) {
+		$single_blog_sidebar_setting = get_theme_mod( 'responsive_single_blog_sidebar_position', 'global' );
+	}
 
 	$responsive_single_blog_sidebar_position = esc_html(
 		( $single_blog_sidebar_setting === 'global' || $single_blog_sidebar_setting === 'default' ) ? $global_sidebar_position : $single_blog_sidebar_setting 
@@ -251,7 +257,7 @@ function responsive_customizer_styles() {
 	}
 	else if($single_blog_sidebar_setting === 'left' || $single_blog_sidebar_setting === 'right' )
 	{
-		$responsive_single_blog_sidebar_width = esc_html(get_theme_mod('responsive_single_blog_sidebar_width', 30)); 
+		$responsive_single_blog_sidebar_width = esc_html( responsive_get_post_sidebar_meta( 'width' ) ?: get_theme_mod( 'responsive_single_blog_sidebar_width', 30 ) );
 		$single_blog_primary_content_area_width  = 100 - $responsive_single_blog_sidebar_width;
 	}
 	else 
@@ -410,7 +416,13 @@ function responsive_customizer_styles() {
 	}
 
 	// Single Post Container Layout.
-	$single_blog_container_layout_setting = get_theme_mod( 'responsive_single_blog_container_layout', 'default' );
+	$single_blog_container_layout_setting = '';
+	if ( is_single() ) {
+		$single_blog_container_layout_setting = get_post_meta( get_the_ID(), 'responsive_page_meta_container_layout', true );
+	}
+	if ( ! $single_blog_container_layout_setting ) {
+		$single_blog_container_layout_setting = get_theme_mod( 'responsive_single_blog_container_layout', 'default' );
+	}
 	$responsive_single_blog_container_layout = ( 'default' === $single_blog_container_layout_setting ) ? $global_container_layout_key : $single_blog_container_layout_setting;
 
 	if ( 'full-width' === $responsive_single_blog_container_layout ) {
@@ -659,7 +671,10 @@ function responsive_customizer_styles() {
 	}
 
 	// Single Post Container Style.
-	$single_blog_container_style_setting = get_theme_mod( 'responsive_single_blog_container_style', 'default' );
+	$single_blog_container_style_setting = is_single() ? get_post_meta( get_the_ID(), 'responsive_page_meta_container_style', true ) : '';
+	if ( ! $single_blog_container_style_setting ) {
+		$single_blog_container_style_setting = get_theme_mod( 'responsive_single_blog_container_style', 'default' );
+	}
 	$responsive_single_blog_container_style = ( 'default' === $single_blog_container_style_setting ) ? $global_container_style_key : $single_blog_container_style_setting;
 	$single_blog_site_background_color = esc_html(
 			responsive_prepare_css_value(
